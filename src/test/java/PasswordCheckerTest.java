@@ -13,7 +13,7 @@ public class PasswordCheckerTest {
 
     @Test
    public void passwordOK() throws PasswordChecker.PasswordException {
-        String expected = "Password is valid";
+        boolean expected = true;
         Assert.assertEquals(expected,pc.passwordIsOK("Manqasana@3"));
     }
 

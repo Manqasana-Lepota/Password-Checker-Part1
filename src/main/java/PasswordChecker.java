@@ -20,8 +20,8 @@ public class PasswordChecker {
     }
 
     public static boolean passwordIsValid(String password) throws PasswordException {
-        if(password.length() < 8) {
-            throw new PasswordException("Oops! your password is too short , " + " " +
+        if(password.isEmpty() || password.length() < 8) {
+            throw new PasswordException("Oops! your password is too short , " + "" +
                     "password should be longer than 8 characters.");
         }
 
@@ -63,12 +63,12 @@ public class PasswordChecker {
 
     }
 
-    public static String passwordIsOK(String password) throws PasswordException {
+    public static boolean passwordIsOK(String password) throws PasswordException {
         if(passwordIsValid(password)) {
-            return "Password is valid";
+            return true;
         }
         else {
-            return "Password is not valid";
+            return false;
         }
     }
 
