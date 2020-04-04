@@ -1,69 +1,60 @@
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PasswordChecker {
+    private static final String PATTER = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})";
 
     public static void main(String[] args) throws Exception {
-        String user_password ="";
+
+        String userPassword = "";
         Scanner kb = new Scanner(System.in);
+
         try {
 
             System.out.println("Please enter your password:");
-            user_password = kb.nextLine();
+            userPassword = kb.nextLine();
 
-            System.out.println("Password : " + user_password);
-            System.out.println(passwordIsOK(user_password));
+            System.out.println("Password : " + userPassword);
+            System.out.println(passwordIsOK(userPassword));
 
-        }
-        catch (PasswordException ex) {
+        } catch (PasswordException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
     public static boolean passwordIsValid(String password) throws PasswordException {
-        if(password.isEmpty() || password.length() < 8) {
+
+        if (password.isEmpty() || password.length() < 8) {
             throw new PasswordException("Oops! your password is too short , " + "" +
                     "password should be longer than 8 characters.");
         }
+        Pattern pattern = Pattern.compile(PATTER);
+        Matcher match = pattern.matcher(password);
 
-        String SpecialCharacters = "[!@#$%&*()_+=|<>?{}\\\\[\\\\]~-]";
-        boolean digit = false;
-        boolean uppercase = false;
-        boolean lowercase = false;
-        boolean specialchars = false;
-
-        for(char currentChar : password.toCharArray()) {
-            if (Character.isDigit(currentChar)) {
-                digit = true;
-            }
-            else if (Character.isUpperCase(currentChar)) {
-                uppercase = true;
-            }
-            else if (Character.isLowerCase(currentChar)) {
-                lowercase = true;
-            }
-            else if (SpecialCharacters.contains(String.valueOf(currentChar))) {
-                specialchars = true;
-
-            }
+        if (match.matches()) {
+            return match.matches();
         }
-
-        if (!digit) {
+        if (!password.matches(".*\\d.*")) {
             throw new PasswordException("Password should have at least one digit.");
         }
-        if (!uppercase) {
+        if (!password.matches(".*[A-Z].*")) {
             throw new PasswordException("Password should have at least one uppercase.");
         }
-        if (!lowercase) {
+        if (!password.matches(".*[a-z].*")) {
             throw new PasswordException("Password should have at least one lowercase.");
         }
-        if (!specialchars) {
+        if (!password.matches(".*[!@#$%^&*+=?-].*")) {
             throw new PasswordException("Password should have at least one special character.");
         }
-        return digit && uppercase && lowercase && specialchars;
-
+        return false;
     }
 
+
+
+
     public static boolean passwordIsOK(String password) throws PasswordException {
+
         if(passwordIsValid(password)) {
             return true;
         }
